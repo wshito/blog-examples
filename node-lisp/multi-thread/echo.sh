@@ -1,10 +1,8 @@
 #!/bin/bash
 
-n=0
-
-for i in {0..5}; do
-    echo "Shell working $i"
+for i in {1..5}; do
     sleep 1
+    echo "Shell working $i"
 done
 
 exit 0
