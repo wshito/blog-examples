@@ -14,6 +14,13 @@ var server = net.createServer (function(socket) {
     }
   });
 
+  // in case the peer terminates the connection unexpectedly
+  socket.on ('error', function () {
+      socket.removeAllListeners();
+      console.log ("Client disconnected: " + address);
+  });
+
+  // thrown when client sends 'bye'
   socket.on ('end', function() {
     console.log("Client disconnected: " + address);
   });
