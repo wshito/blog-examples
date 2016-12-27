@@ -9,7 +9,7 @@
      (lambda (socket data)
        (let ((data-str ; stores the received data in utf8 string
 	      (handler-case (babel:octets-to-string data :encoding :utf-8)
-		(babel-encodings:invalidutf8-continuation-byte (err)
+		(babel-encodings:invalid-utf8-continuation-byte (err)
 		  (declare (ignore err))
 		  (format nil "^@~%")))))
 	 ;; exits if received "bye"
@@ -18,13 +18,16 @@
 		(format t "Client disconnected.~%"))
 	       (t (format t "~a" data-str) ; echo on the server side
 		  (as:write-socket-data socket "Send to server > ")))))
-     ;; handle SIGINT
-     :event-cb (as:signal-handler 2 (lambda (sig)
-				      (declare (ignore sig))
-				      (as:free-signal-handler 2)
-				      (as:exit-event-loop)))
+     :event-cb (lambda (err)
+		 (declare (ignore err))
+		 (format t "Client is unexpectedly disconnected.~%"))
      :connect-cb (lambda (socket)
 		   (format t "Client connected.~%")
-		   (as:write-socket-data socket "Send to server > "))))
+		   (as:write-socket-data socket "Send to server > ")))
+    ;; handle SIGINT
+    (as:signal-handler 2 (lambda (sig)
+			   (declare (ignore sig))
+			   (as:free-signal-handler 2)
+			   (as:exit-event-loop))))
 
 (as:start-event-loop #'my-tcp-server)
