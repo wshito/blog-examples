@@ -1,4 +1,4 @@
-## uvbook's Hello World implementation in Lisp
+# uvbook's Hello World implementation in Lisp
 
 <dl>
 <dt>hello-world-cffi.lisp</dt><dd>Implemented with CFFI.</dd>
