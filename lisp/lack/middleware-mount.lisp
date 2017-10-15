@@ -21,7 +21,7 @@
     (:mount "/hello"
 	    (lambda (env)
 	      (declare (ignore env))
-	      '(200 (:content-type "text/plain") ("Hello world! 2"))))
+	      '(200 (:content-type "text/plain") ("Hello world!"))))
     (lambda (env)
       (declare (ignore env))
       '(404 (:content-type "text/plain") ("Not found, mate!")))))
