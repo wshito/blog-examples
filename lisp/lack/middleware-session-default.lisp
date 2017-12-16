@@ -37,10 +37,6 @@
 ;;
 (defparameter *app*
   (lack:builder
-   (lambda (app)
-     (lambda (env)
-       (let ((res (funcall app env)))
-	 res)))
    :session
    *my-echo*))
 
