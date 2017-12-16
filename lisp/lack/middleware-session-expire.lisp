@@ -3,11 +3,12 @@
 ;; for explanation.
 ;;
 
-(require :clack)
-(require :lack)
+;; (declaim (optimize (speed 2) (space 2) (compilation-speed 2) (debug 3)))
+
+(ql:quickload :clack)
+(ql:quickload :lack)
 
 ;;;;;;;;;;;;; For Debugging ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; (declaim (optimize (debug 3)))
 ;; (asdf:compile-system :hunchentoot :force t)
 ;; (asdf:compile-system :clack :force t)
 ;; (asdf:compile-system :lack :force t)
@@ -30,13 +31,17 @@
 ;; Echos session info
 ;;
 (defparameter *my-echo*
-      (lambda (env)
+  (lambda (env)
+    ;; (declare (optimize (speed 1) (space 1) (compilation-speed 1) (debug 3)))  ;; for debugging
 	(let* ((session (getf env :lack.session))
 	       (counter (gethash :visit session -1)))
-	  (setf (gethash :visit session) (incf counter))
+	       ; (options (getf env :lack.session.options)))
 	  ;; expires after 5 seconds since the last acess
+	  ; (setf (getf options :expires) 5)     ; do not update the values
+	  ; (setf (getf options :new-session) t) ; when the keys do not exist
 	  (setf (getf (getf env :lack.session.options) :expires) 5)
 	  (setf (getf (getf env :lack.session.options) :new-session) t)
+	  (setf (gethash :visit session) (incf counter))
 	  `(200 (:content-type "text/html")
 		,(append
 		  (list "<html><h1>Lack Session Middleware Test</h1>"
@@ -66,4 +71,5 @@
 ;; Stops the Web server
 ;;
 ; (clack:stop *handler*)
+
 
