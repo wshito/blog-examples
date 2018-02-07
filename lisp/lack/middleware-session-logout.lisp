@@ -36,12 +36,21 @@
 (defun get-uid (env)
   (gethash :uid (getf env :lack.session)))
 
-(defun page-header ()
-  '("<html><h1>Lack Session Middleware Test</h1>
+(defun get-session-id (env)
+  (getf (getf env :lack.session.options) :id))
+
+(defun get-change-id (env)
+  (format nil "~A" (getf (getf env :lack.session.options) :change-id)))
+
+(defun page-header (env)
+  `("<html><h1>Lack Session Middleware Test</h1>
    <h2>--- Login Logout Example ---</h2>
-   <p>Access any directories.  Any directories under '<b>/private</b>' needs to be logged in to access.</p>
-   <hr />
-   "))
+   <ul>
+    <li>Access any directories.  Any directories under '<b>/private</b>' needs to be logged in to access.</li>
+    <li>Session ID: " ,(get-session-id env) "</li>
+    <li>:change-id = " ,(get-change-id env) "</li>
+   </ul>
+   <hr />"))
 
 (defun status (uid)
   (if uid
@@ -67,7 +76,7 @@
   (lambda (env)
     (let ((uid (get-uid env)))
       `(200 (:content-type "text/html")
-            ,(append (page-header)
+            ,(append (page-header env)
                      (if uid                       
                          (list "<p>You are already logged in as " uid ".</p>")
                          (login-form))
@@ -78,7 +87,7 @@
   (lambda (env)
     (setf (getf (getf env :lack.session.options) :expire) t)
     `(200 (:content-type "text/html")
-          ,(append (page-header)
+          ,(append (page-header env)
                    (list "<p>You have logged out.</p>")
                    (page-footer)))))
 
@@ -100,6 +109,7 @@
           (let* ((session (getf env :lack.session))
                  (url (gethash :prev-url session "/")))
             (setf (gethash :uid session "/") name)
+            (setf (getf (getf env :lack.session.options) :change-id) t)
             `(303 (:location ,url) ("")))
           (redirect-to-login-page)))))
 
@@ -111,7 +121,7 @@
            ;; /privateにmountしているのでpathには/privateが含まれない
            (path (concatenate 'string "/private" (getf env :path-info))))
       `(200 (:content-type "text/html")
-            ,(append (page-header)
+            ,(append (page-header env)
                      (status uid)
                      (list "<p>Private Area: path = " path "</p>")
                      (page-footer))))))
@@ -126,7 +136,7 @@
            (path (getf env :path-info)))
       (when (null uid) (setf (gethash :prev-url session) path))
       `(200 (:content-type "text/html")
-            ,(append (page-header)
+            ,(append (page-header env)
                      (status uid)
                      (list "<p>path = " path "</p>")
                      (page-footer))))))
