@@ -4,3 +4,4 @@
 *.lisp-temp
 .Rhistory
 *.dSYM
+node_modules
