@@ -9,6 +9,7 @@
   "author": "wshito",
   "license": "ISC",
   "dependencies": {
+    "lodash": "^4.17.11",
     "ramda": "^0.25.0",
     "sanctuary": "^0.15.0"
   }

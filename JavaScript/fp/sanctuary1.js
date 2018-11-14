@@ -10,8 +10,8 @@ const students = [
   { name: "郁子", exams: { midterm: 73, endterm: 82 } },
 ]
 
-const geqX = (border, grade) => alt => x => x >= border ? grade : alt(x);
-const grade = geqX(90, "A")(geqX(80, "B")(geqX(60, "C")(geqX(0, "C")(x => "欠席"))))
+const geqAlt = (border, grade) => alt => x => x >= border ? grade : alt(x);
+const grade = geqAlt(90, "A")(geqAlt(80, "B")(geqAlt(60, "C")(geqAlt(0, "D")(x => "欠席"))))
 
 const gradeLens = R.lensProp("grade");
 const mark = student => R.set(gradeLens, S.map(grade)(student.exams), student)
