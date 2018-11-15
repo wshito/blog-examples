@@ -13,16 +13,11 @@ const students = [
 const geqAlt = (border, grade) => alt => x => x >= border ? grade : alt(x);
 const grade = geqAlt(90, "A")(geqAlt(80, "B")(geqAlt(60, "C")(geqAlt(0, "D")(x => "欠席"))))
 
-const gradeLens = R.lensProp("grade");
-const mark = student => R.set(gradeLens, S.map(grade)(student.exams), student)
-
-/*
 // 副作用あり！
 const mark = st => {
   st.grade = S.map(grade)(st.exams);
   return st;
 }
-*/
 
 console.log(students.map(mark))
 console.log("----------------")
