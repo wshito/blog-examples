@@ -1,6 +1,6 @@
-const S = require('sanctuary')
-const R = require('ramda')
-const _ = require('lodash')
+const S = require('sanctuary');
+const R = require('ramda');
+const _ = require('lodash');
 
 const students = [
   { name: "太朗", exams: { midterm: 'NA', endterm: 65 } },
@@ -23,7 +23,7 @@ const grade2 = R.compose(
 
 const gradeLens = R.lensProp("grade");
 // student.examsの値が同じ型ではないのでS.map()の型制約を満たさない．unchecked.map()を使う．
-const mark = student => R.set(gradeLens, S.unchecked.map(grade2)(student.exams), student)
+const mark = student => R.set(gradeLens, S.unchecked.map(grade2)(student.exams), student);
 
 console.log(students.map(mark));
 console.log("----------------");
