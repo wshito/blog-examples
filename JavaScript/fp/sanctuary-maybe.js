@@ -1,6 +1,5 @@
 const S = require('sanctuary');
 const R = require('ramda');
-const _ = require('lodash');
 
 const students = [
   { name: "太朗", exams: { midterm: 'NA', endterm: 65 } },
@@ -11,7 +10,7 @@ const students = [
   { name: "郁子", exams: { midterm: 73, endterm: null } },
 ]
 
-// nullは欠席になるが，'NA' は欠席にならず D にある．'NA' >= border が例外を投げず false になるから
+// nullは欠席になるが，'NA' は欠席にならず D になる．'NA' >= border が例外を投げず false になるから
 
 const geqAlt = (border, grade) => alt => x => x >= border ? grade : alt(x);
 const grade = geqAlt(90, "A")(geqAlt(80, "B")(geqAlt(60, "C")(x => "D"))); // 欠席はNothing型で対応する
