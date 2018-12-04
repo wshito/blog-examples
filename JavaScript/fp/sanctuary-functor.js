@@ -17,7 +17,7 @@ const geqAlt = (border, grade) => alt => x => x >= border ? grade : alt(x);
 const grade = geqAlt(90, "A")(geqAlt(80, "B")(geqAlt(60, "C")(geqAlt(0, "D")(x => "欠席"))));
 
 markEach = student => {
-  return {...student, grade: S.map(grade)(student.exams)};
+  return { ...student, grade: S.map(grade)(student.exams) };
 };
 
 console.log(students.map(markEach));
