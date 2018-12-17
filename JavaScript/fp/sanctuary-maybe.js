@@ -6,14 +6,12 @@ const students = [
   { name: "花子", exams: { midterm: 93, endterm: 38 } },
   { name: "謙太", exams: { midterm: null, endterm: 65 } },
   { name: "春子", exams: { midterm: 92, endterm: 78 } },
-  { name: "五朗", exams: { midterm: 48, endterm: 25 } },
+  { name: "五朗", exams: { midterm: 0, endterm: 25 } },
   { name: "郁子", exams: { midterm: 73, endterm: null } },
 ];
 
-// nullは欠席になるが，'NA' は欠席にならず D になる．'NA' >= border が例外を投げず false になるから
-
 const geqAlt = (border, grade) => alt => x => x >= border ? grade : alt(x);
-const grade = geqAlt(90, "A")(geqAlt(80, "B")(geqAlt(60, "C")(x => "D"))); // 欠席はNothing型で対応する
+const grade = geqAlt(90, "A")(geqAlt(80, "B")(geqAlt(60, "C")(geqAlt(0, "D")(x => "欠席"))));
 
 const grade2 = R.compose(
   S.fromMaybe("欠席"), // getOrElse()と同じ．
